@@ -13,6 +13,8 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
+  'http://192.168.1.4:3000',
+  'http://192.168.1.4',
   'https://pos.hotelbattasesukhsagar.in',
   'https://sukhsagar.artifycode.com',
   process.env.FRONTEND_URL,
@@ -24,6 +26,10 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
+    // Allow any localhost/192.168.x.x origin for development
+    if (origin.match(/^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/)) {
+      return callback(null, true);
+    }
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
