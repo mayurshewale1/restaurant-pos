@@ -26,8 +26,12 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    // Allow any localhost/192.168.x.x origin for development
-    if (origin.match(/^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/)) {
+    // Allow any localhost/192.168.x.x/10.x.x.x/172.16-31.x.x origin for development
+    if (origin.match(/^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+)(:\d+)?$/)) {
+      return callback(null, true);
+    }
+    // Allow any origin with port 3000 (React dev server)
+    if (origin.match(/^http:\/\/\d+\.\d+\.\d+\.\d+:3000$/)) {
       return callback(null, true);
     }
     if (allowedOrigins.includes(origin)) {
